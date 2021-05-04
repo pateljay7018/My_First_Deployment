@@ -14,18 +14,18 @@ input[type=number], select {
 }
 
 input[type=submit] {
-  width: 100%;
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
+  width: 150px;
+  padding: 10px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  background:  #669999;
+  font-size: 16px;
+  color: #fff;
   cursor: pointer;
 }
 
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: #a3c2c2;
 }
 
 div {
@@ -37,28 +37,102 @@ div {
 
 
 <body>
-<center><h1><font color="white">Insurance Prediction</h1></center>
+<center><h1><font color="black">Heart Disease Prediction</font></h1></center>
 <h2>     </h2>
 
-<div align="center" style="margin-right: 30%;
+<div align="left" style="margin-right: 30%;
     margin-left: 30%;">
 
   <form method="POST">
-  <form action="/action_page.php">
-    <label for="age"></label>
-    <input type="number" id="age" name="age" placeholder="Age" min="18" max="1027" step="0.1" required size="35">
+  <form action="/Predict">
+    <label for="Age">Age : </label>
+    <input type="number" id="Age" name="Age" placeholder="Age" min="00" max="150" required size="35">
 
-    <label for="sex"></label>
-    <input type="number" id="sex" name="sex" placeholder="sex" max="103" step="0.1" required size="35">
+    <label for="Sex">Sex :</label>
+    <select name="Sex" id="Sex">
+      <option value="select">Select Option</option>
+      <option value="0">Male</option>
+      <option value="1">Female</option>
+    </select>
 
-    <label for="cp"></label>
-    <input type="number" id="cp" name="cp" placeholder="cp" max="74" required>
+    <label for="ChestPainType">Chest Pain Type :</label>
+    <select name="ChestPainType" id="ChestPainType">
+      <option value="select">Select Option</option>
+      <option value="0">0 is No Pain</option>
+      <option value="1">1 is Low Pain</option>
+      <option value="2">2 is Medium Pain</option>
+      <option value="3">3 is High Pain</option>
+    </select>
 
-    <select name="req_model">
-    <option value="Logistic">Logistic Regression</option>
-    <option value="RandomForest">Random Forest</option>
-    <option value="SVM">SVM</option>
-  </select>
+    <label for="RestBP"> Rest BP :  </label>
+    <input type="number" id="RestBP" name="RestBP" placeholder="Blood Pressure value between (90-200)" min="70" max="250" step="0.1" required>
+
+    <label for="Cholestrol"> Cholestrol :</label>
+    <input type="number" id="Cholestrol" name="Cholestrol" placeholder="Cholestrol value between (120-600)" min="100" max="600" step="0.1" required>
+
+    <label for="FBS">Fasting Blood Sugar :</label>
+    <select name="FBS" id="FBS">
+      <option value="select">Select Option</option>
+      <option value="0">0 is No FSB</option>
+      <option value="1">1 is FSB</option>
+
+    </select>
+
+    <label for="RestECG">RestECG : </label>
+    <select name="RestECG" id="RestECG">
+      <option value="select">Select Option</option>
+      <option value="0">0 is No RestECG</option>
+      <option value="1">1 is Low RestECG</option>
+      <option value="2">2 is High RestECG</option>
+    </select>
+
+    <label for="MaxHeartRate"> Max Heart Rate :</label>
+    <input type="number" id="MaxHeartRate" name="MaxHeartRate" placeholder="Max Heart Rate value between (70-110)" min="70" max="120" step="0.1" required>
+
+    <label for="ExerAngina">Exercise Induced Angina :</label>
+    <select name="ExerAngina" id="ExerAngina">
+      <option value="select">Select Option</option>
+      <option value="0">0 is NO</option>
+      <option value="1">1 is Yes</option>
+    </select>
+
+    <label for="PrevPeak">Prev Peak :</label>
+    <input type="number" id="PrevPeak" name="PrevPeak" placeholder="Prev Peak value between (0-6.5)" min="0" max="6.5" step="0.1" required>
+
+    <label for="Slope">Slope of the Peak Exercise ST Segment :</label>
+    <select name="Slope" id="Slope">
+      <option value="select">Select Option</option>
+      <option value="0">0 is Upsloping</option>
+      <option value="1">1 is Flat</option>
+      <option value="2">2 is Downsloping</option>
+    </select>
+
+    <label for="NoofMajorVessels">Number of Vessels :</label>
+    <select name="NoofMajorVessels" id="NoofMajorVessels">
+      <option value="select">Select Option</option>
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+    </select>
+
+    <label for="ThalRate">Thalassemia Rate :</label>
+    <select name="ThalRate" id="ThalRate">
+      <option value="select">Select Option</option>
+      <option value="0">0 is Low </option>
+      <option value="1">1 is Medium </option>
+      <option value="2">2 High </option>
+    </select>
+
+     <label for="ThalRate">Select Model :</label>
+
+    <select name="model">
+      <option value="select">Select Option</option>
+      <option value="KNN">KNN Classifier</option>
+      <option value="DecisionTree">Decision Tree Classifier</option>
+      <option value="RandomForest">Random Forest</option>
+    </select>
 
 
     <input type="submit" value="Predict">
@@ -66,8 +140,8 @@ div {
 </form>
 
 <form method="GET">
-    <center><h2><font color="Black"> Sale Category is {{ target}}</h2></center>
-    <center><h2><font color="Black"> {{ sale_making}}</h2></center>
+  <center><h2><font color="Red"> The Decision is {{ target}}</font></h2></center>
+    <center><h2><font color="Red"> {{ sale_making}}</font></h2></center>
 </form>
 
 

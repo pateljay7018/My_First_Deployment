@@ -1,37 +1,44 @@
-#This is Heroku Deployment Lectre
 from flask import Flask, request, render_template
 import os
 import pickle
 
+print("Test")
+print("Test 2")
 print(os.getcwd())
 path = os.getcwd()
 
-with open('Models/logistic_model.pkl', 'rb') as f:
-    logistic = pickle.load(f)
+with open('Models/Pickle_dtc_Model.pkl', 'rb') as f:
+    DecisionTree = pickle.load(f)
 
-with open('Models/RF_model.pkl', 'rb') as f:
-    randomforest = pickle.load(f)
+with open('Models/Pickle_knn_Model.pkl', 'rb') as f:
+    KNN = pickle.load(f)
 
-with open('Models/svm_clf_model.pkl', 'rb') as f:
-    svm_model = pickle.load(f)
+with open('Models/Pickle_rfc_Model.pkl', 'rb') as f:
+    RandomForest = pickle.load(f)
 
+# with open('Models/Pickle_xgbc_Model.pkl', 'rb') as f:
+#     XGBoost = pickle.load(f)
 
-def get_predictions(age, sex, cp, req_model):
-    mylist = [age, sex, cp]
+def get_predictions(Age, Sex, ChestPainType, RestBP,Cholestrol,FBS,RestECG,MaxHeartRate,ExerAngina,PrevPeak,Slope,NoofMajorVessels,ThalRate, model):
+    mylist = [Age, Sex, ChestPainType, RestBP,Cholestrol,FBS,RestECG,MaxHeartRate,ExerAngina,PrevPeak,Slope,NoofMajorVessels,ThalRate]
     mylist = [float(i) for i in mylist]
     vals = [mylist]
 
-    if req_model == 'Logistic':
+    if model == 'KNN':
         #print(req_model)
-        return logistic.predict(vals)[0]
+        return KNN.predict(vals)[0]
 
-    elif req_model == 'RandomForest':
+    elif model == 'DecisionTree':
         #print(req_model)
-        return randomforest.predict(vals)[0]
+        return DecisionTree.predict(vals)[0]
 
-    elif req_model == 'SVM':
+    # elif model == 'XGBoost':
+    #     #print(req_model)
+    #     return XGBoost.predict(vals)[0]
+
+    elif model == 'RandomForest':
         #print(req_model)
-        return svm_model.predict(vals)[0]
+        return RandomForest.predict(vals)[0]
     else:
         return "Cannot Predict"
 
@@ -47,17 +54,29 @@ def homepage():
 @app.route('/', methods=['POST', 'GET'])
 def my_form_post():
     if request.method == 'POST':
-        age = request.form['age']
-        sex = request.form['sex']
-        cp = request.form['cp']
-        req_model = request.form['req_model']
+        Age = request.form['Age']
+        Sex = request.form['Sex']
+        ChestPainType = request.form['ChestPainType']
+        RestBP = request.form['RestBP']
+        Cholestrol = request.form['Cholestrol']
+        FBS = request.form['FBS']
+        RestECG = request.form['RestECG']
+        MaxHeartRate = request.form['MaxHeartRate']
+        ExerAngina = request.form['ExerAngina']
+        PrevPeak = request.form['PrevPeak']
+        Slope = request.form['Slope']
+        NoofMajorVessels = request.form['NoofMajorVessels']
+        ThalRate = request.form['ThalRate']
 
-        target = get_predictions(age, sex, cp, req_model)
+
+        model = request.form['model']
+
+        target = get_predictions(Age, Sex, ChestPainType, RestBP,Cholestrol,FBS,RestECG,MaxHeartRate,ExerAngina,PrevPeak,Slope,NoofMajorVessels,ThalRate,model)
 
         if target==1:
-            sale_making = 'Customer is likely to buy the insurance'
+            sale_making = 'Person is likely to have Heart Disease'
         else:
-            sale_making = 'Customer is unlikely to buy the insurance'
+            sale_making = 'Person is not likely to have heart Disease'
 
         return render_template('home.html', target = target, sale_making = sale_making)
     else:
